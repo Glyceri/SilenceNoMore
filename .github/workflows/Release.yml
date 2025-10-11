@@ -29,7 +29,7 @@ jobs:
       - name: Build
         run: |
           $ver = '${{ github.ref_name }}'
-          invoke-expression 'dotnet build --no-restore --configuration Release --nologo -p:Version=$ver -p:FileVersion=$ver -p:AssemblyVersion=$ver'
+          invoke-expression 'dotnet build --no-restore --configuration Release --nologo ./SilenceNoMore/SilenceNoMore.csproj -p:Version=$ver -p:FileVersion=$ver -p:AssemblyVersion=$ver'
       - name: write version into jsons
         run: |
           $ver = '${{ github.ref_name }}'
