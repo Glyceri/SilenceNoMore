@@ -80,8 +80,8 @@ internal unsafe class Hooks : IDisposable
             Log.Verbose($"Just received a whisper from:" +
                 $"{Environment.NewLine}[{messagePacket->SenderContentId}, {messagePacket->SenderAccountId}]" +
                 $"{Environment.NewLine}[{messagePacket->MessageType}]" +
-                $"{Environment.NewLine}[{messagePacket->GetSenderName()}@{messagePacket->SenderWorldId}]" +
-                $"{Environment.NewLine}[{messagePacket->GetMessage()}]");
+                $"{Environment.NewLine}[{messagePacket->SenderName.ToString()}@{messagePacket->SenderWorldId}]" +
+                $"{Environment.NewLine}[{messagePacket->Message.ToString()}]");
         }
         catch (Exception e)
         {
