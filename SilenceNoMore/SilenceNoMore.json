@@ -1,0 +1,12 @@
+{
+    "Author": "Glyceri",
+    "Name": "Silence No More",
+    "InternalName": "SilenceNoMore",
+    "Punchline": "Shows whispers normally blocked during duties.",
+    "Description": "Shows whispers normally blocked during duties.",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "Duty",
+        "Chat"
+    ]
+}
