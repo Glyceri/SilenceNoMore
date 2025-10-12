@@ -59,9 +59,27 @@ internal class AdvancedConfigurationWindow : Window
             Configuration.Save(DalamudPlugin, Log);
         }
 
+        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+        {
+            ImGui.EndDisabled();
+
+            ImGui.SetTooltip($"{Environment.NewLine} This allows you to send tells when you are IN a duty.{Environment.NewLine} ");
+
+            ImGui.BeginDisabled(!keyComboIsDown);
+        }
+
         if (ImGui.Checkbox("Respond with warning when received in duty.", ref Configuration.ReturnError))
         {
             Configuration.Save(DalamudPlugin, Log);
+        }
+
+        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+        {
+            ImGui.EndDisabled();
+
+            ImGui.SetTooltip($"{Environment.NewLine} When receiving a tell in a duty the sender gets a warning.{Environment.NewLine}You can disable this warning making it appear as if you are not busy and in a duty.{Environment.NewLine} ");
+
+            ImGui.BeginDisabled(!keyComboIsDown);
         }
 
         ImGui.NewLine();
@@ -69,6 +87,15 @@ internal class AdvancedConfigurationWindow : Window
         if (ImGui.Button("Reset to default"))
         {
             Configuration.ResetToDefault(DalamudPlugin, Log);
+        }
+
+        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+        {
+            ImGui.EndDisabled();
+
+            ImGui.SetTooltip($"{Environment.NewLine} Reset all settings to their default values.{Environment.NewLine} ");
+
+            ImGui.BeginDisabled(!keyComboIsDown);
         }
 
         ImGui.EndDisabled();
