@@ -9,8 +9,8 @@
     "RepoUrl": "https://github.com/Glyceri/SilenceNoMore",
     "AcceptsFeedback": false,
     "DalamudApiLevel": 13,
-    "AssemblyVersion": "1.1.0.0",
-    "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.0.0/SilenceNoMore.zip",
-    "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.0.0/SilenceNoMore.zip"
+    "AssemblyVersion": "1.1.0.1",
+    "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.0.1/SilenceNoMore.zip",
+    "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.0.1/SilenceNoMore.zip"
   }
 ]
