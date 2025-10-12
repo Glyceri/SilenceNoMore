@@ -71,7 +71,7 @@ internal unsafe class TellReceivedHook : HookableElement
         try
         {
             Log.Verbose($"Just received a whisper from:" +
-                $"{Environment.NewLine}[{messagePacket->SenderContentId}, {messagePacket->SenderAccountId}]" +
+                $"{Environment.NewLine}[{messagePacket->SenderContentId}]" +
                 $"{Environment.NewLine}[{messagePacket->MessageType}]");
         }
         catch (Exception e)

@@ -7,7 +7,7 @@ namespace SilenceNoMore.Commands;
 internal abstract class Command : ICommand
 {
     public abstract string Description { get; }
-    public abstract bool   ShowInHelp { get; }
+    public abstract bool   ShowInHelp  { get; }
     public abstract string CommandCode { get; }
 
     private readonly ICommandManager CommandManager;
