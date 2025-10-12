@@ -15,9 +15,13 @@ internal unsafe class TellHook : IDisposable
     private readonly IGameInteropProvider Hooker;
 
     private delegate int ShellCommandChatTell_ExecuteCommandDelegate(ShellCommands* shellCommands, Utf8String* tell, UIModule* uiModule);
+    private delegate nint GetTerritoryIntendedUseDelegate(uint rowIdOrIndex);
 
     [Signature("40 55 53 56 57 41 56 41 57 48 8D AC 24 ?? ?? ?? ?? B8", DetourName = nameof(ShellCommandChatTell_ExecuteCommandDetour))]
     private readonly Hook<ShellCommandChatTell_ExecuteCommandDelegate>? ExecuteTellHook;
+
+    [Signature("E8 ?? ?? ?? ?? 8B BE ?? ?? ?? ?? 4C 8B E0", DetourName = nameof(GetTerritoryIntendedUseDetour))]
+    private readonly Hook<GetTerritoryIntendedUseDelegate>? GetTerritoryIntendedUseHook;
 
     private bool triedToSendTell = false;
 
@@ -37,6 +41,17 @@ internal unsafe class TellHook : IDisposable
         }
 
         ExecuteTellHook?.Enable();
+        GetTerritoryIntendedUseHook?.Enable();
+    }
+
+    private nint GetTerritoryIntendedUseDetour(uint rowIdOrIndex)
+    {
+        if (triedToSendTell && rowIdOrIndex == 3 && Configuration.Enabled)
+        {
+            return GetTerritoryIntendedUseHook!.OriginalDisposeSafe(0);
+        }
+
+        return GetTerritoryIntendedUseHook!.OriginalDisposeSafe(rowIdOrIndex);
     }
 
     private int ShellCommandChatTell_ExecuteCommandDetour(ShellCommands* shellCommands, Utf8String* tell, UIModule* uiModule)
@@ -47,7 +62,11 @@ internal unsafe class TellHook : IDisposable
 
             triedToSendTell = true;
 
-            return ExecuteTellHook!.OriginalDisposeSafe(shellCommands, tell, uiModule);
+            int returner = ExecuteTellHook!.OriginalDisposeSafe(shellCommands, tell, uiModule);
+
+            triedToSendTell = false;
+
+            return returner;
         }
         catch (Exception e)
         {
@@ -60,5 +79,6 @@ internal unsafe class TellHook : IDisposable
     public void Dispose()
     {
         ExecuteTellHook?.Dispose();
+        GetTerritoryIntendedUseHook?.Dispose();
     }
 }
