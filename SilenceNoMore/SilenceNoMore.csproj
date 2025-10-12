@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/13.1.0">
   <PropertyGroup>
-    <Version>1.0.0.1</Version>
-    <Description>Receive tells in the client.</Description>
+    <Version>1.1.0.0</Version>
+    <Description>Receive and Send tells in duties.</Description>
     <PackageProjectUrl>https://github.com/Glyceri/SilenceNoMore</PackageProjectUrl>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
     <IsPackable>false</IsPackable>
