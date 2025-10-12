@@ -63,7 +63,7 @@ internal class AdvancedConfigurationWindow : Window
         {
             ImGui.EndDisabled();
 
-            ImGui.SetTooltip($"{Environment.NewLine} This allows you to send tells when you are IN a duty.{Environment.NewLine} ");
+            ImGui.SetTooltip($"{Environment.NewLine}This allows you to send tells when YOU are IN a duty.{Environment.NewLine} ");
 
             ImGui.BeginDisabled(!keyComboIsDown);
         }
@@ -77,7 +77,7 @@ internal class AdvancedConfigurationWindow : Window
         {
             ImGui.EndDisabled();
 
-            ImGui.SetTooltip($"{Environment.NewLine} When receiving a tell in a duty the sender gets a warning.{Environment.NewLine}You can disable this warning making it appear as if you are not busy and in a duty.{Environment.NewLine} ");
+            ImGui.SetTooltip($"{Environment.NewLine}When receiving a tell in a duty the sender gets a warning from YOUR client.{Environment.NewLine}You can disable this warning making it appear as if you are not busy and in a duty.{Environment.NewLine} ");
 
             ImGui.BeginDisabled(!keyComboIsDown);
         }
@@ -93,7 +93,7 @@ internal class AdvancedConfigurationWindow : Window
         {
             ImGui.EndDisabled();
 
-            ImGui.SetTooltip($"{Environment.NewLine} Reset all settings to their default values.{Environment.NewLine} ");
+            ImGui.SetTooltip($"{Environment.NewLine}Reset all settings to their default values.{Environment.NewLine} ");
 
             ImGui.BeginDisabled(!keyComboIsDown);
         }
