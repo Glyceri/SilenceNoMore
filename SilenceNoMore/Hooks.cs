@@ -15,7 +15,7 @@ internal unsafe class Hooks : IDisposable
 
     private delegate byte IsAllowedToReceiveDirectMessagesDelegate(nint a1, int a2, byte a3, byte a4);
     private delegate void OnNetworkChatDelegate(nint a1, MessagePacket* messagePacket);
-    private delegate char MessageBlockedDelegate(NetworkModuleProxy* networkModuleProxy, ulong accountId);
+    private delegate char MessageBlockedDelegate(NetworkModuleProxy* networkModuleProxy, ulong contentId);
 
     [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 63 FA 41 0F B6 D8", DetourName = nameof(IsAllowedToReceiveDirectMessagesDetour))]
     private readonly Hook<IsAllowedToReceiveDirectMessagesDelegate>? IsAllowedToReceiveDirectMessagesHook;
@@ -26,6 +26,7 @@ internal unsafe class Hooks : IDisposable
     [Signature("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 89 B4 24 ?? ?? ?? ?? 33 F6 41 80 7C 24", DetourName = nameof(MessageBlockedDetour))]
     private readonly Hook<MessageBlockedDelegate>? MessageBlockedHook;
 
+    private bool isValidCheck      = false;
     private bool manuallyOverwrote = false;
 
     public Hooks(IPluginLog log, IGameInteropProvider hooker, Configuration configuration)
@@ -53,6 +54,11 @@ internal unsafe class Hooks : IDisposable
 
         byte returnValue = IsAllowedToReceiveDirectMessagesHook!.OriginalDisposeSafe(a1, checkType, a3, a4);
 
+        if (!isValidCheck)
+        {
+            return returnValue;
+        }
+
         if (!Configuration.Enabled)
         {
             return returnValue;
@@ -75,6 +81,8 @@ internal unsafe class Hooks : IDisposable
 
     private void OnNetworkChatDetour(nint a1, MessagePacket* messagePacket)
     {
+        isValidCheck = true;
+
         try
         {
             Log.Verbose($"Just received a whisper from:" +
@@ -101,14 +109,20 @@ internal unsafe class Hooks : IDisposable
         // Let's tell the server we didn't see it though.
         if (manuallyOverwrote)
         {
-            SendMessageFailed(messagePacket->SenderAccountId);
+            SendMessageFailed(messagePacket->SenderContentId);
         }
 
+        isValidCheck      = false;
         manuallyOverwrote = false;
     }
 
-    private void SendMessageFailed(ulong accountId)
+    private void SendMessageFailed(ulong contentId)
     {
+        if (!isValidCheck)
+        {
+            return;
+        }
+
         try
         {
             if (Framework.Instance()->NetworkModuleProxy == null)
@@ -118,7 +132,7 @@ internal unsafe class Hooks : IDisposable
                 return;
             }
 
-            if (MessageBlockedDetour(Framework.Instance()->NetworkModuleProxy, accountId) != 1)
+            if (MessageBlockedDetour(Framework.Instance()->NetworkModuleProxy, contentId) != 1)
             {
                 Log.Debug("Calling MessageBlockedDetour failed internally... well, nothign we can do about it now c:");
             }
@@ -129,11 +143,11 @@ internal unsafe class Hooks : IDisposable
         }
     }
 
-    private char MessageBlockedDetour(NetworkModuleProxy* networkModuleProxy, ulong accountId)
+    private char MessageBlockedDetour(NetworkModuleProxy* networkModuleProxy, ulong contentId)
     {
         Log.Verbose("Handle message blocked.");
 
-        return MessageBlockedHook!.OriginalDisposeSafe(networkModuleProxy, accountId);
+        return MessageBlockedHook!.OriginalDisposeSafe(networkModuleProxy, contentId);
     }
 
     public void Dispose()
