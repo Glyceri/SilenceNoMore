@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace SilenceNoMore;
 
 [StructLayout(LayoutKind.Explicit)]
-public unsafe struct MessagePacket
+public struct MessagePacket
 {
     [FieldOffset(0x00)] public ulong          SenderAccountId;
     [FieldOffset(0x08)] public ulong          SenderContentId;
