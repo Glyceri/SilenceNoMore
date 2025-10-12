@@ -1,16 +1,16 @@
 [
-  {
-    "Author": "Glyceri",
-    "Name": "Silence no More",
-    "InternalName": "SilenceNoMore",
-    "Description": "Design and apply your own status effects with custom formatting, durations, and other accoutrements.",
-    "ApplicableVersion": "any",
-    "Punchline": "Shows whispers normally blocked during duties.",
-    "RepoUrl": "https://github.com/Glyceri/SilenceNoMore",
-    "AcceptsFeedback": false,
-    "DalamudApiLevel": 13,
-    "AssemblyVersion": "1.0.0.2",
-    "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.0.0.2/SilenceNoMore.zip",
-    "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.0.0.2/SilenceNoMore.zip"
-  }
+    {
+        "Author": "Glyceri",
+        "Name": "Silence no More",
+        "InternalName": "SilenceNoMore",
+        "Description": "Shows whispers normally blocked during duties.",
+        "ApplicableVersion": "any",
+        "Punchline": "Shows whispers normally blocked during duties.",
+        "RepoUrl": "https://github.com/Glyceri/SilenceNoMore",
+        "AcceptsFeedback": false,
+        "DalamudApiLevel": 13,
+        "AssemblyVersion": "1.0.0.1",
+        "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.0.0.1/SilenceNoMore.zip",
+        "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.0.0.1/SilenceNoMore.zip"
+    }
 ]

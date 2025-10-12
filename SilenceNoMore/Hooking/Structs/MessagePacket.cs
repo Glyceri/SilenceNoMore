@@ -1,7 +1,7 @@
 using InteropGenerator.Runtime;
 using System.Runtime.InteropServices;
 
-namespace SilenceNoMore;
+namespace SilenceNoMore.Hooking.Structs;
 
 [StructLayout(LayoutKind.Explicit)]
 public struct MessagePacket

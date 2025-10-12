@@ -3,52 +3,37 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility.Signatures;
 using FFXIVClientStructs.FFXIV.Client.Network;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Client.UI.Shell;
+using SilenceNoMore.Hooking.Constants;
+using SilenceNoMore.Hooking.Structs;
 using System;
 
-namespace SilenceNoMore;
+namespace SilenceNoMore.Hooking.Hooks;
 
-internal unsafe class Hooks : IDisposable
+internal unsafe class TellReceivedHook : HookableElement
 {
-    private readonly Configuration        Configuration;
-    private readonly IPluginLog           Log;
-    private readonly IGameInteropProvider Hooker;
+    [Signature(Signatures.IsAllowedToReceiveDirectMessagesSignature, DetourName = nameof(IsAllowedToReceiveDirectMessagesDetour))]
+    private readonly Hook<Delegates.IsAllowedToReceiveDirectMessagesDelegate>? IsAllowedToReceiveDirectMessagesHook;
 
-    private delegate byte IsAllowedToReceiveDirectMessagesDelegate(nint a1, int a2, byte a3, byte a4);
-    private delegate void OnNetworkChatDelegate(nint a1, MessagePacket* messagePacket);
-    private delegate char MessageBlockedDelegate(NetworkModuleProxy* networkModuleProxy, ulong contentId);
+    [Signature(Signatures.OnNetworkChatSignature, DetourName = nameof(OnNetworkChatDetour))]
+    private readonly Hook<Delegates.OnNetworkChatDelegate>? OnNetworkChatHook;
 
-    [Signature("48 89 5C 24 ?? 57 48 83 EC 20 48 63 FA 41 0F B6 D8", DetourName = nameof(IsAllowedToReceiveDirectMessagesDetour))]
-    private readonly Hook<IsAllowedToReceiveDirectMessagesDelegate>? IsAllowedToReceiveDirectMessagesHook;
-
-    [Signature("41 54 41 57 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? 4C 8B E2", DetourName = nameof(OnNetworkChatDetour))]
-    private readonly Hook<OnNetworkChatDelegate>? OnNetworkChatHook;
-
-    [Signature("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 89 B4 24 ?? ?? ?? ?? 33 F6 41 80 7C 24", DetourName = nameof(MessageBlockedDetour))]
-    private readonly Hook<MessageBlockedDelegate>? MessageBlockedHook;
+    [Signature(Signatures.MessageBlockedSignature, DetourName = nameof(MessageBlockedDetour))]
+    private readonly Hook<Delegates.MessageBlockedDelegate>? MessageBlockedHook;
 
     private bool isValidCheck      = false;
     private bool manuallyOverwrote = false;
 
-    public Hooks(IPluginLog log, IGameInteropProvider hooker, Configuration configuration)
+    public TellReceivedHook(IPluginLog log, IGameInteropProvider hooker, IConfiguration configuration)
+        : base(hooker, log, configuration) { }
+
+    public override void Init()
     {
-        Log           = log;
-        Hooker        = hooker;
-        Configuration = configuration;
-
-        try
-        {
-            Hooker.InitializeFromAttributes(this);
-        }
-        catch (Exception e)
-        {
-            Log.Error(e, "Failure in constructor.");
-        }
-
         IsAllowedToReceiveDirectMessagesHook?.Enable();
         OnNetworkChatHook?.Enable();
     }
 
-    private byte IsAllowedToReceiveDirectMessagesDetour(nint a1, int checkType, byte a3, byte a4)
+    private byte IsAllowedToReceiveDirectMessagesDetour(RaptureShellModule* a1, int checkType, byte a3, byte a4)
     {
         Log.Verbose("Just received a whisper.");
 
@@ -59,7 +44,7 @@ internal unsafe class Hooks : IDisposable
             return returnValue;
         }
 
-        if (!Configuration.Enabled)
+        if (!Configuration.IsEnabled)
         {
             return returnValue;
         }
@@ -105,7 +90,7 @@ internal unsafe class Hooks : IDisposable
 
         // This means we forced the message to display on our client.
         // Let's tell the server we didn't see it though.
-        if (manuallyOverwrote)
+        if (manuallyOverwrote && Configuration.CanReturnError)
         {
             SendMessageFailed(messagePacket->SenderContentId);
         }
@@ -148,7 +133,7 @@ internal unsafe class Hooks : IDisposable
         return MessageBlockedHook!.OriginalDisposeSafe(networkModuleProxy, contentId);
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         IsAllowedToReceiveDirectMessagesHook?.Dispose();
         OnNetworkChatHook?.Dispose();
