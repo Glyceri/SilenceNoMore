@@ -9,6 +9,7 @@ public sealed unsafe class SilenceNoMorePlugin : IDalamudPlugin
 {
     private readonly Configuration Configuration;
     private readonly Hooks         Hooks;
+    private readonly TellHook      TellHook;
     private readonly WindowHandler WindowHandler;
 
     [PluginService] internal IPluginLog           Log       { get; private set; } = null!;
@@ -19,6 +20,7 @@ public sealed unsafe class SilenceNoMorePlugin : IDalamudPlugin
         Configuration = plugin.GetPluginConfig() as Configuration ?? new Configuration();
 
         Hooks         = new Hooks(Log, Hooker, Configuration);
+        TellHook      = new TellHook(Log, Hooker, Configuration);
 
         WindowHandler = new WindowHandler(plugin, Log, Configuration);
     }
@@ -28,6 +30,7 @@ public sealed unsafe class SilenceNoMorePlugin : IDalamudPlugin
         try
         {
             Hooks?.Dispose();
+            TellHook?.Dispose();
         }
         catch (Exception e) 
         {
