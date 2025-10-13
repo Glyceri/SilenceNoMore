@@ -11,6 +11,7 @@
     "DalamudApiLevel": 13,
     "AssemblyVersion": "1.1.1.0",
     "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.1.0/SilenceNoMore.zip",
-    "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.1.0/SilenceNoMore.zip"
+    "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.1.0/SilenceNoMore.zip",
+    "Changelog": "I added a changelog!\n\nThe last update fixed whispers not working in every instance type."
   }
 ]
