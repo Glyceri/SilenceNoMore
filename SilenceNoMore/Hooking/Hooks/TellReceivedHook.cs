@@ -59,6 +59,11 @@ internal unsafe class TellReceivedHook : HookableElement
             return returnValue;
         }
 
+        if (!Settings.CurrentTerritoryIsAllowed())
+        {
+            return returnValue;
+        }
+
         manuallyOverwrote = true;
 
         return 1;

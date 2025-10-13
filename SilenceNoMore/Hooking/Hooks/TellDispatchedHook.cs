@@ -37,12 +37,12 @@ internal unsafe class TellDispatchedHook : HookableElement
             return returner;
         }
 
-        if (rowIdOrIndex != 3)
+        if (!Configuration.CanSendInDuty)
         {
             return returner;
         }
 
-        if (!Configuration.CanSendInDuty)
+        if (!Settings.CurrentTerritoryIsAllowed())
         {
             return returner;
         }
