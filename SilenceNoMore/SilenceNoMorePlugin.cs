@@ -1,8 +1,11 @@
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using Lumina.Excel;
+using Lumina.Excel.Sheets;
 using SilenceNoMore.Commands;
 using SilenceNoMore.Hooking;
+using SilenceNoMore.Hooking.Enums;
 using SilenceNoMore.Windowing;
 using System;
 
@@ -19,6 +22,7 @@ public sealed unsafe class SilenceNoMorePlugin : IDalamudPlugin
     [PluginService] internal IGameInteropProvider Hooker         { get; private set; } = null!;
     [PluginService] internal ICommandManager      CommandManager { get; private set; } = null!;
     [PluginService] internal IChatGui             ChatGui        { get; private set; } = null!;
+    [PluginService] internal IClientState         ClientState    { get; private set; } = null!;
 
     public SilenceNoMorePlugin(IDalamudPluginInterface plugin)
     {

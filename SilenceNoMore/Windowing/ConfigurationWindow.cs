@@ -16,11 +16,11 @@ internal class ConfigurationWindow : Window
     private readonly WindowHandler              WindowHandler;
 
     private readonly Vector2 MinSize     = new Vector2(200, 132);
-    private readonly Vector2 MaxSize     = new Vector2(200, 132);
+    private readonly Vector2 MaxSize     = new Vector2(400, 300);
     private readonly Vector2 DefaultSize = new Vector2(200, 132);
 
     public ConfigurationWindow(IDalamudPluginInterface plugin, IPluginLog log, Configuration configuration, WindowHandler windowHandler) 
-        : base("Silence No More", ImGuiWindowFlags.NoResize, true)
+        : base("Silence No More", ImGuiWindowFlags.None, true)
     {
         DalamudPlugin       = plugin;
         Log                 = log;

@@ -51,7 +51,23 @@ internal static unsafe class Settings
         TerritoryIntendedUseEnum.Criterion_Duty,
         TerritoryIntendedUseEnum.Criterion_Savage_Duty,
         TerritoryIntendedUseEnum.Blunderville,
-        TerritoryIntendedUseEnum.Occult_Crescent,             
+        TerritoryIntendedUseEnum.Occult_Crescent,       
+        TerritoryIntendedUseEnum.Frontline,
+        TerritoryIntendedUseEnum.Crystalline_Conflict_Public,
+        TerritoryIntendedUseEnum.Crystalline_Conflict_Premade,
+        TerritoryIntendedUseEnum.Rival_Wings
+    ];
+
+    public static readonly TerritoryChatRuleEnum[] AllowedChatRules =
+    [
+        TerritoryChatRuleEnum.CrystallineConflict,
+        TerritoryChatRuleEnum.CrystallineConflictPremade,
+        TerritoryChatRuleEnum.BattleHall,
+        TerritoryChatRuleEnum.NormalContent,
+        TerritoryChatRuleEnum.Frontline,
+        TerritoryChatRuleEnum.RivalWings,
+        TerritoryChatRuleEnum.Eureka,
+        TerritoryChatRuleEnum.Blunderville
     ];
 
     public static bool CurrentTerritoryIsAllowed()
@@ -70,6 +86,25 @@ internal static unsafe class Settings
             TerritoryIntendedUseEnum enumValue = AllowedZones[i];
 
             if ((int)enumValue != currentId)
+            {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool ChatRuleCanBeOverriden(TerritoryChatRuleEnum chatruleIndex)
+    {
+        int arrayLength = AllowedChatRules.Length;
+
+        for (int i = 0; i < arrayLength; i++)
+        {
+            TerritoryChatRuleEnum enumValue = AllowedChatRules[i];
+
+            if (enumValue != chatruleIndex)
             {
                 continue;
             }

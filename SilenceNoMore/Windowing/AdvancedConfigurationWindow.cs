@@ -15,11 +15,11 @@ internal class AdvancedConfigurationWindow : Window
     private readonly WindowHandler           WindowHandler;
 
     private readonly Vector2 MinSize     = new Vector2(300, 240);
-    private readonly Vector2 MaxSize     = new Vector2(300, 240);
+    private readonly Vector2 MaxSize     = new Vector2(500, 400);
     private readonly Vector2 DefaultSize = new Vector2(300, 240);
 
     public AdvancedConfigurationWindow(IDalamudPluginInterface plugin, IPluginLog log, Configuration configuration, WindowHandler windowHandler) 
-        : base("Silence No More [ADVANCED]", ImGuiWindowFlags.NoResize, true)
+        : base("Silence No More [ADVANCED]", ImGuiWindowFlags.None, true)
     {
         DalamudPlugin       = plugin;
         Log                 = log;
