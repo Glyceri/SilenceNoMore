@@ -9,9 +9,9 @@
     "RepoUrl": "https://github.com/Glyceri/SilenceNoMore",
     "AcceptsFeedback": false,
     "DalamudApiLevel": 13,
-    "AssemblyVersion": "1.1.2.0",
-    "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.2.0/SilenceNoMore.zip",
-    "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.2.0/SilenceNoMore.zip",
+    "AssemblyVersion": "1.1.2.1",
+    "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.2.1/SilenceNoMore.zip",
+    "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.2.1/SilenceNoMore.zip",
     "Changelog": "Fixes duplicate signature... how the plugin didn't crash I truly dont know."
   }
 ]
