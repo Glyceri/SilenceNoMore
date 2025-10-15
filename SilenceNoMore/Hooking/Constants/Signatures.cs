@@ -9,5 +9,5 @@ internal static class Signatures
 
     public const string IsAllowedToReceiveDirectMessagesSignature   = "48 89 5C 24 ?? 57 48 83 EC 20 48 63 FA 41 0F B6 D8";
     public const string OnNetworkChatSignature                      = "41 54 41 57 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? 4C 8B E2";
-    public const string MessageBlockedSignature                     = "48 89 5C 24 ?? 57 48 83 EC 20 48 63 FA 41 0F B6 D8";
+    public const string MessageBlockedSignature                     = "E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 89 B4 24 ?? ?? ?? ?? 33 F6 41 80 7C 24";
 }

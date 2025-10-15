@@ -12,6 +12,6 @@
     "AssemblyVersion": "1.1.2.0",
     "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.2.0/SilenceNoMore.zip",
     "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.2.0/SilenceNoMore.zip",
-    "Changelog": "I added a changelog!\n\nThe last update fixed whispers not working in every instance type."
+    "Changelog": "Fixes duplicate signature... how the plugin didn't crash I truly dont know."
   }
 ]

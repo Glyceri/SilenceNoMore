@@ -46,18 +46,26 @@ internal unsafe class TellReceivedHook : HookableElement
 
         if (!Configuration.IsEnabled)
         {
+            Log.Verbose("Tried to relay aber Configuration.IsEnabled is false.");
+
             return returnValue;
         }
 
         if (returnValue != 0)
         {
+            Log.Verbose("Tried to relay but returnValue is not 0.");
+
             return returnValue;
         }
 
         if (checkType != 2)
         {
+            Log.Verbose("Tried to relay but checkType is not 2.");
+
             return returnValue;
         }
+
+        Log.Verbose("Manually overwrote the whisper.");
 
         manuallyOverwrote = true;
 
@@ -88,6 +96,8 @@ internal unsafe class TellReceivedHook : HookableElement
             Log.Error(e, "Failure in OnNetworkChatHook.");
         }
 
+        Log.Verbose($"manuallyOverwrote: {manuallyOverwrote} && Configuration.CanReturnError: {Configuration.CanReturnError}");
+
         // This means we forced the message to display on our client.
         // Let's tell the server we didn't see it though.
         if (manuallyOverwrote && Configuration.CanReturnError)
@@ -103,6 +113,8 @@ internal unsafe class TellReceivedHook : HookableElement
     {
         if (!isValidCheck)
         {
+            Log.Verbose($"failed isValidCheck.");
+
             return;
         }
 
@@ -119,6 +131,8 @@ internal unsafe class TellReceivedHook : HookableElement
             {
                 Log.Debug("Calling MessageBlockedDetour failed internally... well, nothign we can do about it now c:");
             }
+
+            Log.Verbose($"Returned block message.");
         }
         catch (Exception e)
         {
@@ -128,7 +142,7 @@ internal unsafe class TellReceivedHook : HookableElement
 
     private char MessageBlockedDetour(NetworkModuleProxy* networkModuleProxy, ulong contentId)
     {
-        Log.Verbose("Handle message blocked.");
+        Log.Verbose("Handle message blocked: " + contentId);
 
         return MessageBlockedHook!.OriginalDisposeSafe(networkModuleProxy, contentId);
     }
