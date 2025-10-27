@@ -10,12 +10,12 @@ namespace SilenceNoMore.Hooking.Constants;
 
 internal static unsafe class Delegates
 {
-    public delegate int                 ExecuteTellCommandDelegate                 (ShellCommands* shellCommands, Utf8String* tell, UIModule* uiModule);
-    public delegate nint                GetTerritoryIntendedUseDelegate            (uint rowIdOrIndex);
-    public delegate TerritoryChatRule*  GetTerritoryChatRuleDelegate               (TerritoryChatRuleEnum rowIdOrIndex);
-    public delegate byte                SendPublicTellDelegate                     (nint a1, nint a2, ushort a3, nint a4, nint a5, byte tellReason);
+    public delegate int                     ExecuteTellCommandDelegate                 (ShellCommands* shellCommands, Utf8String* tell, UIModule* uiModule);
+    public delegate TerritoryIntendedUse*   GetTerritoryIntendedUseDelegate            (TerritoryIntendedUseEnum rowIdOrIndex);
+    public delegate TerritoryChatRule*      GetTerritoryChatRuleDelegate               (TerritoryChatRuleEnum rowIdOrIndex);
+    public delegate byte                    SendPublicTellDelegate                     (nint a1, nint a2, ushort a3, nint a4, nint a5, byte tellReason);
 
-    public delegate byte                IsAllowedToReceiveDirectMessagesDelegate   (RaptureShellModule* raptureShell, int checkType, byte checkForInnStatus, byte isLocked);
-    public delegate void                OnNetworkChatDelegate                      (nint unknownBase, MessagePacket* messagePacket);
-    public delegate char                MessageBlockedDelegate                     (NetworkModuleProxy* networkModuleProxy, ulong contentId);
+    public delegate byte                    IsAllowedToReceiveDirectMessagesDelegate   (RaptureShellModule* raptureShell, int checkType, byte checkForInnStatus, byte isLocked);
+    public delegate void                    OnNetworkChatDelegate                      (nint unknownBase, MessagePacket* messagePacket);
+    public delegate char                    MessageBlockedDelegate                     (NetworkModuleProxy* networkModuleProxy, ulong contentId);
 }

@@ -12,6 +12,6 @@
     "AssemblyVersion": "1.1.2.1",
     "DownloadLinkInstall": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.2.1/SilenceNoMore.zip",
     "DownloadLinkUpdate": "https://github.com/Glyceri/SilenceNoMore/releases/download/1.1.2.1/SilenceNoMore.zip",
-    "Changelog": "Fixes duplicate signature... how the plugin didn't crash I truly dont know."
+    "Changelog": "Added the commands /globaltell and /dutytell"
   }
 ]

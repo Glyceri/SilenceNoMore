@@ -1,5 +1,6 @@
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
+using SilenceNoMore.Chat;
 using SilenceNoMore.Windowing;
 using System;
 
@@ -9,12 +10,12 @@ internal class SilenceCommand : Command
 {
     private readonly ConfigurationWindow         ConfigurationWindow;
     private readonly AdvancedConfigurationWindow AdvancedConfigurationWindow;
-    private readonly IChatGui                    ChatGui;
+    private readonly ChatHandler                 ChatHandler;
 
-    public SilenceCommand(ICommandManager commandManager, IChatGui chatGUI, ConfigurationWindow window, AdvancedConfigurationWindow advancedConfigurationWindow)
+    public SilenceCommand(ICommandManager commandManager, ChatHandler chatHandler, ConfigurationWindow window, AdvancedConfigurationWindow advancedConfigurationWindow)
         : base(commandManager)
     {
-        ChatGui                     = chatGUI;
+        ChatHandler                 = chatHandler;
         ConfigurationWindow         = window;
         AdvancedConfigurationWindow = advancedConfigurationWindow;
     }
@@ -31,9 +32,9 @@ internal class SilenceCommand : Command
 
     private void RunHelp()
     {
-        ChatGui.Print
+        ChatHandler.SendChatMessage
         (
-            $"Silence no More Help: {Environment.NewLine}" +
+            $"Help{Environment.NewLine}" +
             $"{Environment.NewLine}" +
             $"Toggle the configuration window using the following commands:{Environment.NewLine}" +
             $"    /silence --> opens the window.{Environment.NewLine}" +
@@ -51,7 +52,7 @@ internal class SilenceCommand : Command
 
     private void CommandNotRecognizedWarning(string command, string args)
     {
-        ChatGui.Print
+        ChatHandler.SendChatMessage
         (
             $"The command: '{command} {args}' was NOT recognized."
         );

@@ -21,7 +21,7 @@ internal abstract class HookableElement : IDisposable
         }
         catch (Exception e)
         {
-            Log.Error(e, "Failure in setting up hooks.");
+            Log.Error(e, "Fout tijdens het gereedmaken van de 'Hooks'.");
         }
     }
 

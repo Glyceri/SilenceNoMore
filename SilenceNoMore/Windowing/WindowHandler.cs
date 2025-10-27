@@ -1,3 +1,5 @@
+using Dalamud.Bindings.ImGui;
+using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -30,21 +32,33 @@ internal class WindowHandler : IDisposable
         WindowSystem.AddWindow(ConfigurationWindow);
         WindowSystem.AddWindow(AdvancedConfigurationWindow);
 
-        DalamudPlugin.UiBuilder.Draw         += OnDraw;
+        DalamudPlugin.UiBuilder.Draw         += WindowSystem.Draw;
         DalamudPlugin.UiBuilder.OpenConfigUi += () =>
         {
             ConfigurationWindow.IsOpen = true;
         };
     }
 
-    private void OnDraw()
-    {
-        WindowSystem.Draw();
-    }
+    // The 16 is because this plugin was made for exlusively dalamud font size 12 (which is font scale 16 in ImGUI).
+    // Scaling the whole UI thingy around it seems to work perfectly fine
+    public static float FontScale
+        => (ImGui.GetFontSize() / 16.0f);
+
+    public static float GlobalScale
+        => ImGuiHelpers.GlobalScale * FontScale;
+
+    private static float RawBarHeight
+        => 30;
+
+    public static float BarHeight
+        => RawBarHeight * GlobalScale;
+
+    public static float CheckboxHeight 
+        => (BarHeight - ImGui.GetTextLineHeight()) / 2;
 
     public void Dispose()
     {
-        DalamudPlugin.UiBuilder.Draw -= OnDraw;
+        DalamudPlugin.UiBuilder.Draw -= WindowSystem.Draw;
 
         WindowSystem.RemoveAllWindows();
     }

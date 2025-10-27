@@ -1,6 +1,6 @@
 namespace SilenceNoMore.Hooking.Enums;
 
-internal enum TerritoryChatRuleEnum
+internal enum TerritoryChatRuleEnum : byte
 {
     CityErea                    = 0,  // Public: NoRestriction        Shout: NoRestriction        DutyTell: Restricted        PublicTell: NoRestriction        Party: NoRestriction       Global: NoRestriction       Pvp: NoRestriction
     BattleHall                  = 1,  // Public: Restricted           Shout: Restricted           DutyTell: Restricted        PublicTell: Restricted           Party: Restricted          Global: Restricted          Pvp: Restricted

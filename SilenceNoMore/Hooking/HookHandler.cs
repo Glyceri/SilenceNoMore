@@ -1,5 +1,6 @@
 using Dalamud.Plugin.Services;
 using SilenceNoMore.Hooking.Hooks;
+using SilenceNoMore.TellHandling;
 using System;
 using System.Collections.Generic;
 
@@ -8,16 +9,29 @@ namespace SilenceNoMore.Hooking;
 internal class HookHandler : IDisposable
 {
     private readonly IPluginLog            Log;
+    private readonly IAddonLifecycle       AddonLifecycle;
+    private readonly TellHandler           TellHandler;
+    private readonly IClientState          ClientState;
     private readonly List<HookableElement> Hooks = [];
 
-    public HookHandler(IGameInteropProvider hooker, IPluginLog log, IConfiguration configuration)
+    private readonly TellDispatchedHook TellDispatchedHook;
+    private readonly TellReceivedHook   TellReceivedHook;
+    private readonly TellHandlerHook    TellHandlerHook;
+    private readonly ChatLogHook        ChatLogHook;
+    private readonly TerritoryHook      TerritoryHook;
+
+    public HookHandler(IGameInteropProvider hooker, IPluginLog log, IConfiguration configuration, IAddonLifecycle addonLifecycle, TellHandler tellHandler, IClientState clientState)
     {
-        Log = log;
+        Log            = log;
+        TellHandler    = tellHandler;
+        ClientState    = clientState;
+        AddonLifecycle = addonLifecycle;
 
-        RegisterHook(new TellDispatchedHook(log, hooker, configuration));
-        RegisterHook(new TellReceivedHook(log, hooker, configuration));
-
-        Initialize();
+        RegisterHook(TellDispatchedHook = new TellDispatchedHook(hooker, log, configuration, TellHandler));
+        RegisterHook(TellReceivedHook   = new TellReceivedHook(hooker, log, configuration));
+        RegisterHook(TellHandlerHook    = new TellHandlerHook(hooker, log, configuration));
+        RegisterHook(ChatLogHook        = new ChatLogHook(hooker, log, configuration, AddonLifecycle, TellHandler));
+        RegisterHook(TerritoryHook      = new TerritoryHook(hooker, log, configuration, ClientState, TellDispatchedHook, TellHandler));
     }
 
     private void RegisterHook(HookableElement hookableElement)
@@ -27,7 +41,7 @@ internal class HookHandler : IDisposable
         Hooks.Add(hookableElement);
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         foreach (HookableElement hookableElement in Hooks)
         {
@@ -45,7 +59,7 @@ internal class HookHandler : IDisposable
             }
             catch(Exception e)
             {
-                Log.Error(e, $"Hook [{hookableElement.GetType().Name}] failed to dipose properly.");
+                Log.Error(e, $"De 'Hook' [{hookableElement.GetType().Name}] is niet volledig opgeruimd.");
             }
         }
     }
