@@ -47,7 +47,6 @@ public sealed unsafe class SilenceNoMorePlugin : IDalamudPlugin
         {
             TellHandler.SetTellState(TellState.GlobalTell);
         }
-
     }
 
     public void Dispose()

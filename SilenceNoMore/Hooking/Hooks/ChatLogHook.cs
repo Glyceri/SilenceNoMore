@@ -20,7 +20,7 @@ internal unsafe class ChatLogHook : HookableElement
 
     private readonly Hook<AgentChatLog.Delegates.ChangeChannelName>? ChangeChannelNameHook = null!;
 
-    private bool chatIsTell = false;
+    private bool         chatIsTell       = false;
 
     public ChatLogHook(IGameInteropProvider hooker, IPluginLog log, IConfiguration configuration, IAddonLifecycle addonLifecycle, TellHandler tellHandler)
         : base(hooker, log, configuration) 
@@ -55,6 +55,11 @@ internal unsafe class ChatLogHook : HookableElement
             return;
         }
 
+        if (TellHandler.IsRestricted)
+        {
+            return;
+        }
+
         // Chat type label
         AtkTextNode* labelTextNode = atkUnitBase->GetTextNodeById(4);
 
@@ -67,6 +72,12 @@ internal unsafe class ChatLogHook : HookableElement
 
         if (chatIsTell)
         {
+            // Dit is ABSURD maar lost voor nu wel het probleem op ERM
+            if (labelTextNode->NodeText.ToString().EndsWith(')'))
+            {
+                return;
+            }
+
             labelTextNode->NodeText.Append(Utf8String.FromString($" ({TellHandler.TellStateName})"));
 
             Log.Verbose($"De huidige labelTextNode heeft als text: {labelTextNode->NodeText.ToString()}");
@@ -99,6 +110,7 @@ internal unsafe class ChatLogHook : HookableElement
         {
             return returner;
         }
+
 
         string playerName = SeString.Parse(thisPtr->TellPlayerName).TextValue;
         ushort worldId    = thisPtr->TellWorldId;
