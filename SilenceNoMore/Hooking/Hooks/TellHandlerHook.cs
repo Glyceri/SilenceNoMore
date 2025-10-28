@@ -12,6 +12,8 @@ internal unsafe class TellHandlerHook : HookableElement
     private readonly Hook<RaptureShellModule.Delegates.SetTellTargetInForay>?        SetTellTargetInForayHook        = null!;
     private readonly Hook<RaptureShellModule.Delegates.ReplyInSelectedChatMode>?     ReplyInSeletedChatModeHook      = null!;
 
+    private bool _whisperStatusChanged = false;
+
     public TellHandlerHook(IGameInteropProvider hooker, IPluginLog log, IConfiguration configuration) 
         : base(hooker, log, configuration)
     {
@@ -29,9 +31,17 @@ internal unsafe class TellHandlerHook : HookableElement
         ReplyInSeletedChatModeHook?.Enable();
     }
 
+    public bool WhisperStatusChanged
+        => _whisperStatusChanged;
+
+    public void ResetStatus()
+        => _whisperStatusChanged = false;
+
     private bool SetContextTellTargetDetour(RaptureShellModule* thisPtr, Utf8String* playerName, Utf8String* worldName, ushort worldId, ulong accountId, ulong contentId, ushort reason, bool setChatType)
     {
         Log.Verbose($"Heeft Context Tell Target aangeroepen: {playerName->ToString()}@{worldName->ToString()} {accountId} {contentId}");
+
+        _whisperStatusChanged = true;
 
         return SetContextTellTargetHook!.OriginalDisposeSafe(thisPtr, playerName, worldName, worldId, accountId, contentId, reason, setChatType);
     }
@@ -39,6 +49,8 @@ internal unsafe class TellHandlerHook : HookableElement
     private void SetContextTellTargetInForayDetour(RaptureShellModule* thisPtr, Utf8String* playerName, Utf8String* worldName, ushort worldId, ulong accountId, ulong contentId, ushort reason)
     {
         Log.Verbose($"Heeft Context Tell Target In Foray aangeroepen: {playerName->ToString()}@{worldName->ToString()} {accountId} {contentId}");
+        
+        _whisperStatusChanged = true;
 
         SetContextTellTargetInForayHook!.OriginalDisposeSafe(thisPtr, playerName, worldName, worldId, accountId, contentId, reason);
     }
@@ -47,12 +59,16 @@ internal unsafe class TellHandlerHook : HookableElement
     {
         Log.Verbose($"Heeft Tell Target In Foray aangeroepen: {playerName->ToString()}@{worldName->ToString()} {accountId} {contentId}");
 
+        _whisperStatusChanged = true;
+
         return SetTellTargetInForayHook!.OriginalDisposeSafe(thisPtr, playerName, worldName, worldId, accountId, contentId, reason, setChatType);
     }
 
     private void ReplyInSelectedChatModeDetour(RaptureShellModule* thisPtr)
     {
         Log.Verbose("Antwoord in geselecteerde 'chat' modus.");
+
+        _whisperStatusChanged = true;
 
         ReplyInSeletedChatModeHook!.OriginalDisposeSafe(thisPtr);
     }

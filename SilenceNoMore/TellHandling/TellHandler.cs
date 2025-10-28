@@ -49,7 +49,7 @@ internal class TellHandler
             return;
         }
 
-        if (changed) 
+        if (changed && !IsRestricted) 
         {
             ChatHandler.SendChatMessage($"Your 'Tell Mode' has changed to: ({TellStateName}).");
         }

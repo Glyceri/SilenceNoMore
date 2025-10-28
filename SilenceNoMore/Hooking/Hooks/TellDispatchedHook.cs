@@ -125,16 +125,16 @@ internal unsafe class TellDispatchedHook : HookableElement
 
         TerritoryChatRule* territoryObject = (TerritoryChatRule*)_territoryChatRuleHandle.AddrOfPinnedObject();
 
-        territoryObject->Public         = returner->Public;
-        territoryObject->Shout          = returner->Shout;
-        territoryObject->DutyTell       = returner->DutyTell;
-        territoryObject->Party          = returner->Party;
-        territoryObject->Global         = returner->Global;
-        territoryObject->Pvp            = returner->Pvp;
-        territoryObject->UnkBool        = returner->UnkBool;
+        territoryObject->Public     = returner->Public;
+        territoryObject->Shout      = returner->Shout;
+        territoryObject->DutyTell   = returner->DutyTell;
+        territoryObject->Party      = returner->Party;
+        territoryObject->Global     = returner->Global;
+        territoryObject->Pvp        = returner->Pvp;
+        territoryObject->UnkBool    = returner->UnkBool;
 
-        territoryObject->DutyTell       = ChatBlockStateEnum.Restricted;
-        territoryObject->PublicTell     = ChatBlockStateEnum.NoRestriction;
+        territoryObject->DutyTell   = ChatBlockStateEnum.Restricted;
+        territoryObject->PublicTell = ChatBlockStateEnum.NoRestriction;
 
         Log.Verbose($"Heeft zojuist de 'GetTerritoryChatRuleDetour' overschreven om het versturen van een fluisterbericht toe te staan.{Environment.NewLine}{territoryObject->ToString()}");
 

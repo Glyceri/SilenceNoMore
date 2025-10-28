@@ -7,5 +7,4 @@ internal enum TellReasonEnum : byte
     Reply       = 2,
     Friend      = 3,
     DutyTell    = 4,
-
 }

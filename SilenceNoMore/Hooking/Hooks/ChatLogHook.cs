@@ -1,6 +1,5 @@
 using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
-using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Hooking;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.System.String;
@@ -17,16 +16,19 @@ internal unsafe class ChatLogHook : HookableElement
 {
     private readonly IAddonLifecycle AddonLifecycle;
     private readonly TellHandler     TellHandler;
+    private readonly TellHandlerHook TellHandlerHook;
 
     private readonly Hook<AgentChatLog.Delegates.ChangeChannelName>? ChangeChannelNameHook = null!;
 
-    private bool         chatIsTell       = false;
+    private bool         chatIsTell   = false;
+    private InputChannel lastChatType = InputChannel.Invalid;
 
-    public ChatLogHook(IGameInteropProvider hooker, IPluginLog log, IConfiguration configuration, IAddonLifecycle addonLifecycle, TellHandler tellHandler)
+    public ChatLogHook(IGameInteropProvider hooker, IPluginLog log, IConfiguration configuration, IAddonLifecycle addonLifecycle, TellHandler tellHandler, TellHandlerHook tellHandlerHook)
         : base(hooker, log, configuration) 
     {
-        AddonLifecycle = addonLifecycle;
-        TellHandler    = tellHandler;
+        AddonLifecycle  = addonLifecycle;
+        TellHandler     = tellHandler;
+        TellHandlerHook = tellHandlerHook;
 
         ChangeChannelNameHook = Hooker.HookFromAddress<AgentChatLog.Delegates.ChangeChannelName>(AgentChatLog.MemberFunctionPointers.ChangeChannelName, ChangeChannelNameDetour);
     }
@@ -43,7 +45,7 @@ internal unsafe class ChatLogHook : HookableElement
 
     private void ChatLogPostRequestedUpdateDetour(AtkUnitBase* atkUnitBase)
     {
-        Log.Verbose("Heeft zojuist ChatLogPostRequestedUpdateDetour aangeroepen");
+        Log.Verbose("Heeft zojuist ChatLogPostRequestedUpdateDetour aangeroepen.");
 
         if (atkUnitBase == null)
         {
@@ -68,19 +70,13 @@ internal unsafe class ChatLogHook : HookableElement
             return;
         }
 
-        Log.Verbose($"De huidige labelTextNode heeft als text: {labelTextNode->NodeText.ToString()}");
+        Log.Verbose($"De huidige labelTextNode heeft als tekst: {labelTextNode->NodeText.ToString()}");
 
         if (chatIsTell)
         {
-            // Dit is ABSURD maar lost voor nu wel het probleem op ERM
-            if (labelTextNode->NodeText.ToString().EndsWith(')'))
-            {
-                return;
-            }
-
             labelTextNode->NodeText.Append(Utf8String.FromString($" ({TellHandler.TellStateName})"));
 
-            Log.Verbose($"De huidige labelTextNode heeft als text: {labelTextNode->NodeText.ToString()}");
+            Log.Verbose($"De huidige labelTextNode heeft als tekst: {labelTextNode->NodeText.ToString()}");
         }
     }
 
@@ -106,18 +102,30 @@ internal unsafe class ChatLogHook : HookableElement
             chatType = InputChannel.Tell;
         }
 
+        if (lastChatType != chatType)
+        {
+            Log.Verbose($"'lastChatType' {lastChatType} is NIET gelijk aan 'chatType' {chatType}");
+
+            lastChatType = chatType;
+
+            return returner;
+        }
+
         if (chatType != InputChannel.Tell)
         {
             return returner;
         }
 
+        bool tellStatusChanged = TellHandlerHook.WhisperStatusChanged;
 
-        string playerName = SeString.Parse(thisPtr->TellPlayerName).TextValue;
-        ushort worldId    = thisPtr->TellWorldId;
+        Log.Warning("Is de 'Tell' status is veranderd: " + tellStatusChanged);
 
-        Log.Verbose($"De fluister naam is: {playerName}@{worldId}");
+        TellHandlerHook.ResetStatus();
 
-        chatIsTell = true;
+        if (tellStatusChanged)
+        {
+            chatIsTell = true;
+        }
 
         return returner;
     }

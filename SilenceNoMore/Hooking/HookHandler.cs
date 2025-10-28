@@ -30,7 +30,7 @@ internal class HookHandler : IDisposable
         RegisterHook(TellDispatchedHook = new TellDispatchedHook(hooker, log, configuration, TellHandler));
         RegisterHook(TellReceivedHook   = new TellReceivedHook(hooker, log, configuration));
         RegisterHook(TellHandlerHook    = new TellHandlerHook(hooker, log, configuration));
-        RegisterHook(ChatLogHook        = new ChatLogHook(hooker, log, configuration, AddonLifecycle, TellHandler));
+        RegisterHook(ChatLogHook        = new ChatLogHook(hooker, log, configuration, AddonLifecycle, TellHandler, TellHandlerHook));
         RegisterHook(TerritoryHook      = new TerritoryHook(hooker, log, configuration, ClientState, TellDispatchedHook, TellHandler));
     }
 
